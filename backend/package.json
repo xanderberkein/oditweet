@@ -1,0 +1,15 @@
+{
+  "name": "odisee-feed-backend",
+  "version": "0.0.1",
+  "description": "odisee-feed-backend",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.3.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint --fix src",
+    "test": "mocha --exit"
+  }
+}
