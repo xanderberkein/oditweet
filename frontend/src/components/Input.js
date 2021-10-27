@@ -32,6 +32,8 @@ const Input = ({ onSend }) => {
   );
 };
 
-Input.propTypes = {};
+Input.propTypes = {
+  onSend: PropTypes.func,
+};
 
 export default Input;

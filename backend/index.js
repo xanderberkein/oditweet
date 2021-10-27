@@ -43,6 +43,15 @@ io.on('connection', (socket) => {
       oditweets.push(newOditweet);
     }
   });
+
+  socket.on('likes', ({ id }) => {
+    const oditweet = oditweets.find((o) => o.id === id);
+
+    const newLikes = (oditweet.likes || 0) + 1;
+    oditweet.likes = newLikes;
+
+    io.emit('likes-server', { id, likes: newLikes });
+  });
 });
 
 server.listen(3001, () => {

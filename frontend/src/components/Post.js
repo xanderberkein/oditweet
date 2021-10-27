@@ -25,6 +25,13 @@ const Post = ({ id, name, date, content, likes = 0, onLike }) => {
   );
 };
 
-Post.propTypes = {};
+Post.propTypes = {
+  id: PropTypes.string,
+  name: PropTypes.string,
+  date: PropTypes.string,
+  content: PropTypes.string,
+  likes: PropTypes.number,
+  onLike: PropTypes.func,
+};
 
 export default Post;

@@ -5,6 +5,8 @@ import Post from './components/Post';
 import { formatISO } from 'date-fns';
 import axios from 'axios';
 
+import { update } from 'ramda';
+
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
@@ -34,13 +36,26 @@ function App() {
   }, []);
 
   const sendMessageToServer = (message) => {
-    console.log('message', message);
     socket.emit('oditweet', { content: message, name: 'Xander', date: formatISO(new Date()) });
   };
 
   socket.on('oditweet', (oditweet) => {
-    console.log('oditweet from server', oditweet);
     setOditweets([...oditweets, oditweet]);
+  });
+
+  const likeOditweet = (id) => {
+    socket.emit('likes', { id });
+  };
+
+  socket.on('likes-server', ({ id, likes }) => {
+    const oditweetsCopy = [...oditweets];
+
+    const oditweetToUpdateIndex = oditweetsCopy.findIndex((o) => o.id === id);
+    const oditweetToUpdateCopy = { ...oditweetsCopy[oditweetToUpdateIndex] };
+
+    oditweetToUpdateCopy.likes = likes;
+
+    setOditweets(update(oditweetToUpdateIndex, oditweetToUpdateCopy, oditweetsCopy));
   });
 
   return (
@@ -49,11 +64,13 @@ function App() {
       <Input onSend={sendMessageToServer} />
       {oditweets.map((oditweet) => (
         <Post
+          key={oditweet.id}
           id={oditweet.id}
           name={oditweet.name}
           date={oditweet.date}
           content={oditweet.content}
-          onLike={id => console.log(id)}
+          likes={oditweet.likes}
+          onLike={likeOditweet}
         />
       ))}
     </div>
